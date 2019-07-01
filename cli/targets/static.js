@@ -637,7 +637,7 @@ function buildService(ref, service) {
             "@typedef " + cbName,
             "@type {function}",
             "@param {Error|null} error Error, if any",
-            "@param {" + exportName(method.resolvedResponseType) + "} [response] " + method.resolvedResponseType.name
+            "@param {" + exportName(method.resolvedResponseType, !config.forceMessage) + "} [response] " + method.resolvedResponseType.name
         ]);
         push("");
         pushComment([
@@ -663,7 +663,7 @@ function buildService(ref, service) {
             "@memberof " + exportName(service),
             "@instance",
             "@param {" + exportName(method.resolvedRequestType, !config.forceMessage) + "} request " + method.resolvedRequestType.name + " message or plain object",
-            "@returns {Promise<" + exportName(method.resolvedResponseType) + ">} Promise",
+            "@returns {Promise<" + exportName(method.resolvedResponseType, !config.forceMessage) + ">} Promise",
             "@variation 2"
         ]);
     });
