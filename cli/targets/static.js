@@ -659,7 +659,7 @@ function buildService(ref, service) {
             push("");
         pushComment([
             method.comment || "Calls " + method.name + ".",
-            "@function " + lcName,
+            "@function " + lcName + "Async",
             "@memberof " + exportName(service),
             "@instance",
             "@param {" + exportName(method.resolvedRequestType, !config.forceMessage) + "} request " + method.resolvedRequestType.name + " message or plain object",
