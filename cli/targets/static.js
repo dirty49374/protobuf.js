@@ -655,8 +655,7 @@ function buildService(ref, service) {
             push("return this.rpcCall(" + escapeName(lcName) + ", $root." + exportName(method.resolvedRequestType) + ", $root." + exportName(method.resolvedResponseType) + ", request, callback);");
             --indent;
         push("}, \"name\", { value: " + JSON.stringify(method.name) + " });");
-        if (config.comments)
-            push("");
+        push("");
         pushComment([
             method.comment || "Calls " + method.name + ".",
             "@function " + lcName + "Async",
@@ -666,6 +665,14 @@ function buildService(ref, service) {
             "@returns {Promise<" + exportName(method.resolvedResponseType, !config.forceMessage) + ">} Promise",
             "@variation 2"
         ]);
+        push("Object.defineProperty(" + escapeName(service.name) + ".prototype" + util.safeProp(lcName) + "Async = function " + escapeName(lcName) + "Async(request) {");
+            ++indent;
+            push("const self = this;");
+            push("return new Promise(function (resolve, reject) { self" + util.safeProp(lcName) + "(request, function (error, response) { if (error) reject(error); else resolve(response); }) });");
+            --indent;
+        push("}, \"name\", { value: " + JSON.stringify(method.name + "Async") + " });");
+        if (config.comments)
+            push("");
     });
 }
 
