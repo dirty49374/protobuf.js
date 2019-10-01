@@ -625,6 +625,12 @@ function buildService(ref, service) {
         push("};");
     }
 
+    pushComment([
+        service.name + " service implementation interface.",
+        "@memberof " + exportName(service.parent),
+        "@interface " + exportName(service, true) + "Impl",
+    ]);
+
     service.methodsArray.forEach(function(method) {
         method.resolve();
         var lcName = protobuf.util.lcFirst(method.name),
@@ -640,6 +646,19 @@ function buildService(ref, service) {
             "@param {" + exportName(method.resolvedResponseType, !config.forceMessage) + "} [response] " + method.resolvedResponseType.name
         ]);
         push("");
+
+        pushComment([
+            "Handler as used by {@link " + exportName(service) + "#" + escapeName(lcName) + "}.",
+            // This is a more specialized version of protobuf.rpc.ServiceCallback
+            "@memberof " + exportName(service, true) + "Impl",
+            "@method " + escapeName(method.name),
+            "@instance",
+            "@param {ServerUnaryCall<" + exportName(method.resolvedRequestType, !config.forceMessage) + ">} call " + method.resolvedRequestType.name + "call",
+            "@param {sendUnaryData<" + exportName(method.resolvedResponseType, !config.forceMessage) + ">} callback " + method.resolvedResponseType.name + " callback",
+            "@returns {undefined}"
+        ]);
+        push("");
+        
         pushComment([
             method.comment || "Calls " + method.name + ".",
             "@function " + lcName,
